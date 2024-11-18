@@ -1,35 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import WeekView from './components/WeekView';
-import HabitList from './components/HabitList';
-import AddHabit from './components/AddHabit';
+import React, { useState, useEffect } from "react";
+import Navbar from "./components/Navbar";
+import WeekView from "./components/WeekView";
+import HabitList from "./components/HabitList";
+import AddHabit from "./components/AddHabit";
+import { Route, Routes } from "react-router-dom";
+import AuthPopup from "./components/AuthPopup";
 
 const App = () => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [habits, setHabits] = useState({});
 
   useEffect(() => {
-    const storedHabits = JSON.parse(localStorage.getItem('habits')) || {};
+    const storedHabits = JSON.parse(localStorage.getItem("habits")) || {};
     setHabits(storedHabits);
   }, []);
- 
+
   useEffect(() => {
-    localStorage.setItem('habits', JSON.stringify(habits));
+    localStorage.setItem("habits", JSON.stringify(habits));
   }, [habits]);
 
   const addHabit = (day, habit) => {
     setHabits((prev) => ({
       ...prev,
-      [day]: [...(prev[day] || []), habit]
+      [day]: [...(prev[day] || []), habit],
     }));
   };
 
   const toggleHabitCompletion = (day, habitName) => {
     setHabits((prev) => ({
       ...prev,
-      [day]: prev[day].map(habit =>
-        habit.name === habitName ? { ...habit, completed: !habit.completed } : habit
-      )
+      [day]: prev[day].map((habit) =>
+        habit.name === habitName
+          ? { ...habit, completed: !habit.completed }
+          : habit
+      ),
     }));
   };
 
@@ -50,6 +54,9 @@ const App = () => {
           </>
         )}
       </div>
+      <Routes>
+        <Route path="/signUp" element={<AuthPopup/>}></Route>
+      </Routes>
     </div>
   );
 };
